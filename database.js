@@ -10,7 +10,13 @@ db.exec(`
     content TEXT NOT NULL,
     status TEXT DEFAULT 'pending',
     created_at INTEGER DEFAULT (strftime('%s', 'now'))
-  )
+  );
+
+  CREATE TABLE IF NOT EXISTS rp_posts (
+    submission_id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    created_at INTEGER DEFAULT (strftime('%s', 'now'))
+  );
 `);
 
 module.exports = {
@@ -30,6 +36,17 @@ module.exports = {
   },
 
   deleteSubmission(id) {
+    const submission = db.prepare('SELECT user_id FROM submissions WHERE id = ?').get(id);
+    if (submission) {
+      db.prepare('INSERT OR REPLACE INTO rp_posts (submission_id, user_id) VALUES (?, ?)').run(id, submission.user_id);
+    }
     db.prepare('DELETE FROM submissions WHERE id = ?').run(id);
+  },
+
+  getSubmitterUserId(submissionId) {
+    const fromSubmissions = db.prepare('SELECT user_id FROM submissions WHERE id = ?').get(submissionId);
+    if (fromSubmissions) return fromSubmissions.user_id;
+    const fromPosts = db.prepare('SELECT user_id FROM rp_posts WHERE submission_id = ?').get(submissionId);
+    return fromPosts ? fromPosts.user_id : null;
   }
 };
