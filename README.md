@@ -3,7 +3,7 @@
 A Discord bot for submitting, reviewing, and publishing anonymous RP posts.
 
 ## Features
-- Players submit posts via `/rp-1x1` slash command
+- Players submit posts via `/rp-submit` slash command
 - A modal form collects pseudonym, title, and content
 - Submission is sent to a mod review channel with Approve/Deny buttons
 - If approved: post is published in the RP channel as the pseudonym
@@ -29,3 +29,26 @@ Enable Developer Mode in Discord (User Settings → Advanced → Developer Mode)
 - **GUILD_ID**: Right-click your server name → Copy Server ID
 - **MOD_REVIEW_CHANNEL_ID**: Right-click your mod review channel → Copy Channel ID
 - **RP_CHANNEL_ID**: Right-click your RP channel → Copy Channel ID
+
+### 3. Configure Environment
+```bash
+cp .env.example .env
+```
+Fill in all values in `.env`
+
+### 4. Install & Run
+```bash
+npm install
+node index.js
+```
+
+## Usage
+- Players type `/rp-submit` anywhere in the server
+- Fill in the modal: pseudonym (optional), title, content
+- Mods see it in the review channel with Approve ✅ / Deny ❌ buttons
+- On deny: mod is prompted for a reason, player gets DM'd
+- On approve: post appears in RP channel, thread opens automatically
+
+## Notes
+- Pending submissions are stored in memory — if the bot restarts, pending submissions are lost
+- To make submissions persistent across restarts, a database like SQLite can be added
