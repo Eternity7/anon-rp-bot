@@ -1,4 +1,6 @@
 require('dotenv').config();
+const http = require('http');
+http.createServer((req, res) => res.end('Bot is running!')).listen(8080);
 const {
   Client, GatewayIntentBits, REST, Routes,
   SlashCommandBuilder, PermissionFlagsBits,
