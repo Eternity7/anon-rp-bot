@@ -2,6 +2,7 @@ app = "anon-rp-bot"
 primary_region = "sin"
 
 [build]
+builder = "paketobuildpacks/builder-jammy-base"
 
 [http_service]
   internal_port = 8080
